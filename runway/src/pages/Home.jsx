@@ -202,8 +202,10 @@ const Home = () => {
       try {
         const response = await fetch(`${API_BASE}/categories`);
         if (response.ok) {
-          const categoriesData = await response.json();
-          setCategories(categoriesData);
+          const data = await response.json(); // <- store JSON in `data`
+          setCategories(Array.isArray(data.categories) ? data.categories : []);
+        } else {
+          console.error('Failed to fetch categories, status:', response.status);
         }
       } catch (err) {
         console.error('Failed to fetch categories:', err);
@@ -212,6 +214,7 @@ const Home = () => {
 
     fetchCategories();
   }, []);
+
 
   // Sync search
   useEffect(() => {
